@@ -14,6 +14,8 @@ def inteiro(value, minimo=0):
 
 
 def run(data):
+    if not isinstance(data, dict):
+        raise ValueError("A entrada deve ser um objeto JSON.")
     inicio = inteiro(data["pagina_inicial"], 1)
     fim = inteiro(data.get("pagina_final", inicio), inicio)
     pagina = f"p. {inicio}" if inicio == fim else f"p. {inicio}–{fim}"
@@ -50,3 +52,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
