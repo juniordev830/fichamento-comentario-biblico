@@ -1,5 +1,7 @@
 'Monte uma ficha de pesquisa com edição, página, paráfrase e sua avaliação.'
 
+import re
+
 
 def texto(value):
     if not isinstance(value, str) or not value.strip():
@@ -13,6 +15,12 @@ def inteiro(value, minimo=0):
     return value
 
 
+def texto_markdown(value):
+    """Preserva metadados como texto em uma única linha do documento."""
+    uma_linha = " ".join(value.split())
+    return re.sub(r"([\\`*_{}\[\]()<>#+!|~&.\-])", r"\\\1", uma_linha)
+
+
 def run(data):
     if not isinstance(data, dict):
         raise ValueError("A entrada deve ser um objeto JSON.")
@@ -24,7 +32,10 @@ def run(data):
     referencia = texto(data["referencia"])
     parafrase = texto(data["parafrase"])
     avaliacao = texto(data["avaliacao"])
-    markdown = f"# {referencia}\n\n{fonte}\n\n## Paráfrase\n\n{parafrase}\n\n## Avaliação\n\n{avaliacao}"
+    markdown = (
+        f"# {texto_markdown(referencia)}\n\n{texto_markdown(fonte)}"
+        f"\n\n## Paráfrase\n\n{parafrase}\n\n## Avaliação\n\n{avaliacao}"
+    )
     return {"fonte": fonte, "localizador": pagina, "markdown": markdown}
 
 

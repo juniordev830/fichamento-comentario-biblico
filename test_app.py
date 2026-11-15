@@ -15,6 +15,18 @@ class ProjetoTest(unittest.TestCase):
         result = run(data)
         self.assertEqual(result['localizador'], 'p. 45–46')
 
+    def test_metadados_preservam_a_estrutura_do_markdown(self):
+        data = json.loads((ROOT / "exemplo.json").read_text(encoding="utf-8"))
+        data["referencia"] = "João 3:16\n## Nota"
+        data["autor"] = "Autora [edição]\nsegunda linha"
+        data["parafrase"] = "**Ênfase da própria ficha**"
+        result = run(data)
+        headings = [line for line in result["markdown"].splitlines() if line.startswith("#")]
+        self.assertEqual(headings, [r"# João 3:16 \#\# Nota", "## Paráfrase", "## Avaliação"])
+        self.assertIn(r"Autora \[edição\] segunda linha", result["markdown"])
+        self.assertIn("**Ênfase da própria ficha**", result["markdown"])
+        self.assertTrue(result["fonte"].startswith(data["autor"]))
+
     def test_cli_com_exemplo(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "app.py"), str(ROOT / "exemplo.json")],
