@@ -40,6 +40,7 @@ def run(data):
 
 
 import argparse
+import sys
 import json
 from pathlib import Path
 
@@ -60,6 +61,7 @@ def rejeitar_constante_json(constante):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("entrada", type=Path, help="Arquivo JSON com os dados")
+    parser.add_argument("--markdown", action="store_true", help="Exportar a ficha de leitura em MARKDOWN")
     args = parser.parse_args()
 
     try:
@@ -75,7 +77,11 @@ def main():
     except (KeyError, TypeError, ValueError, OSError) as exc:
         parser.exit(2, f"Erro nos dados ou na execução: {exc}\n")
 
-    print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+    if args.markdown:
+        sys.stdout.reconfigure(encoding="utf-8", newline="\n")
+        print(result['markdown'])
+    else:
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
 
 
 if __name__ == "__main__":
