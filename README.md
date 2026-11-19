@@ -22,3 +22,9 @@ Os exemplos incluem referências bíblicas, perguntas e anotações de demonstra
 ## Exportação para notas
 
 Use `python app.py exemplo.json --markdown > relatorio.md` para exportar a ficha de leitura. O arquivo pode ser aberto diretamente no Obsidian ou em outro editor Markdown. O JSON continua sendo a saída padrão.
+
+Também é possível encadear a ferramenta com outro comando usando `-` como entrada. Exemplo em um terminal Bash:
+
+```bash
+cat exemplo.json | python app.py -
+```
