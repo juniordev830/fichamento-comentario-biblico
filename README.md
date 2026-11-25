@@ -28,3 +28,8 @@ Também é possível encadear a ferramenta com outro comando usando `-` como ent
 ```bash
 cat exemplo.json | python app.py -
 ```
+
+
+## Novo recurso
+
+As listas opcionais `palavras_chave` e `questoes` acrescentam indexação e questões de pesquisa ao fichamento. Entradas vazias ou tipos incorretos são rejeitados, e os itens são escapados no Markdown.
