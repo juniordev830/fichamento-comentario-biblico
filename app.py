@@ -36,7 +36,18 @@ def run(data):
         f"# {texto_markdown(referencia)}\n\n{texto_markdown(fonte)}"
         f"\n\n## Paráfrase\n\n{parafrase}\n\n## Avaliação\n\n{avaliacao}"
     )
-    return {"fonte": fonte, "localizador": pagina, "markdown": markdown}
+    resultado = {"fonte": fonte, "localizador": pagina, "markdown": markdown}
+    for campo, titulo in (("palavras_chave", "Palavras-chave"), ("questoes", "Questões de pesquisa")):
+        if campo not in data:
+            continue
+        itens = data[campo]
+        if not isinstance(itens, list):
+            raise ValueError(f"{campo} deve ser uma lista de textos.")
+        valores = list(dict.fromkeys(texto(item) for item in itens))
+        resultado[campo] = valores
+        if valores:
+            resultado["markdown"] += "\n\n## " + titulo + "\n\n" + "\n".join("- " + texto_markdown(item) for item in valores)
+    return resultado
 
 
 import argparse
